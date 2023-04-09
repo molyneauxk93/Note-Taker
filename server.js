@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 3001;
 
 const app = express();
 
-//middleware
+//middleware for parsing JSON and url encoded form data
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/api', api);

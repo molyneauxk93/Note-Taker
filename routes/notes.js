@@ -79,7 +79,7 @@ fb.delete('/:id', (req, res) => {
         const noteId = req.params.id;
 
         //for loop to loop through db.json file until object with request id is located
-        for(let i=0; i = notes.length; i++) {
+        for(let i=0; i < notes.length; i++) {
             const currentNote = notes[i];
             if(currentNote.id === noteId){
                 //if id is located, splice to remove located object from the array

@@ -1,1 +1,32 @@
-[]
+[
+    {
+        "title": "Wake Up",
+        "text": "Brush teeth",
+        "id": "ad0d"
+    },
+    {
+        "title": "Make Breakfast",
+        "text": "Eggs, bacon, protein shake",
+        "id": "9cd7"
+    },
+    {
+        "title": "Study",
+        "text": "Express.js",
+        "id": "6a7a"
+    },
+    {
+        "title": "Lunch",
+        "text": "Pizza and Wings",
+        "id": "6923"
+    },
+    {
+        "title": "Study Part 2",
+        "text": "SQL Databases ",
+        "id": "5ef4"
+    },
+    {
+        "title": "Dinner",
+        "text": "Tacos",
+        "id": "38f7"
+    }
+]

@@ -1,5 +1,5 @@
 //const fb set to require express router
-const fb = require('express').Router(); 
+const fb = require('express').Router();
 
 const fs = require('fs');
 
@@ -10,7 +10,7 @@ const { readAndAppend, readFromFile } = require('../helpers/fsUtils.js');
 const uuid = require('../helpers/uuid.js');
 
 //assigning db.json to notes variable for use in api routes 
-const notes = require('../db/db.json');
+// const notes = require('../db/db.json');
 
 
 //Get for queries on api/notes
@@ -19,7 +19,7 @@ fb.get('/:id', (req, res) => {
     if (req.params.id) {
         console.info(`${req.method} request received to get a single a note`);
         const noteId = req.params.id;
-        
+
         //loop through notes and find the note that matches the id parameter
         for (let i = 0; i < notes.length; i++) {
             const currentNote = notes[i];
@@ -36,20 +36,20 @@ fb.get('/:id', (req, res) => {
 });
 
 //GET route for retrieving notes 
-fb.get('/', (req,res) =>
+fb.get('/', (req, res) =>
     //read from db.json file, if there is data parse json data in json response
     readFromFile('./db/db.json')
-    .then((data) => res.json(JSON.parse(data))) 
+        .then((data) => res.json(JSON.parse(data)))
 );
 
-fb.post('/', (req,res) => {
+fb.post('/', (req, res) => {
 
     //deconstructing assignment for the items in req.body
 
     const { title, text } = req.body;
 
     //if all the required properties are present 
-    if(title && text) {
+    if (title && text) {
         //variable for the object to be saved 
         const newNote = {
             title,
@@ -73,24 +73,33 @@ fb.post('/', (req,res) => {
 });
 
 //DELETE route for deleting selecting notes
-fb.delete('/:id', (req, res) => {
+fb.delete('/:id', async(req, res) => {
+
+    // read data from db.json and assign to const data
+    const data =  await readFromFile('./db/db.json')
+
+    // parse JSON and assign to const notes
+    const notes = JSON.parse(data);
+
     //check to see if there is an id in the url
-    if(req.params.id) {
+    if (req.params.id) {
         const noteId = req.params.id;
 
-        //for loop to loop through db.json file until object with request id is located
-        for(let i=0; i < notes.length; i++) {
-            const currentNote = notes[i];
-            if(currentNote.id === noteId){
-                //if id is located, splice to remove located object from the array
-                notes.splice(i,1);
-            }
+        // fincts note where the note.id matches const noteId
+        const foundNoteIndex = notes.findIndex(note => noteId === note.id)  // returns the index
+
+        //makes sure returned findIndex is not -1
+        if (foundNoteIndex != '-1') {
+
+            //splices out the note with that index
+            notes.splice(foundNoteIndex, 1);
+            
+            //write updated object array back to db.json file 
+            fs.writeFile('./db/db.json', JSON.stringify(notes), (err) =>
+                err ? console.log(err) : console.log('Notes json file successfully updated!')
+            );
         }
 
-        //write updated object array back to db.json file 
-        fs.writeFile('./db/db.json', JSON.stringify(notes), (err) =>
-        err ? console.log(err) : console.log('Notes json file successfully updated!')
-        );
     }
     res.json('Delete request complete.');
 });
